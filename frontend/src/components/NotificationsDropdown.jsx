@@ -93,7 +93,7 @@ export function NotificationsDropdown() {
     }
   }, [isOpen, loadNotifications]);
 
-  // Cerrar al hacer clic fuera
+  // Cerrar al hacer clic o tocar fuera
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -102,9 +102,11 @@ export function NotificationsDropdown() {
     }
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
     }
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
     };
   }, [isOpen]);
 
@@ -251,9 +253,9 @@ export function NotificationsDropdown() {
         )}
       </button>
 
-      {/* Panel Flotante de Notificaciones */}
+      {/* Panel Flotante de Notificaciones (Responsive móvil + escritorio) */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200/90 z-50 overflow-hidden animate-modal-panel">
+        <div className="fixed inset-x-3 top-16 sm:inset-x-auto sm:absolute sm:right-0 sm:top-full sm:mt-2 sm:w-96 max-w-sm sm:max-w-none mx-auto sm:mx-0 bg-white rounded-2xl shadow-2xl border border-slate-200/90 z-50 overflow-hidden animate-modal-panel">
           {/* Cabecera Principal */}
           <div className="px-4 py-3 bg-gradient-to-r from-slate-50 via-white to-slate-50 border-b border-slate-100 flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -342,8 +344,8 @@ export function NotificationsDropdown() {
             </button>
           </div>
 
-          {/* Listado con Scroll Independiente */}
-          <div className="max-h-80 overflow-y-auto divide-y divide-slate-100 scrollbar-thin scrollbar-thumb-slate-200">
+          {/* Listado con Scroll Independiente adaptado a viewport */}
+          <div className="max-h-[60vh] sm:max-h-80 overflow-y-auto divide-y divide-slate-100 scrollbar-thin scrollbar-thumb-slate-200">
             {loading ? (
               <div className="p-8 text-center text-slate-400">
                 <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2 text-[#00687a]" />
